@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/SwipeDissmissView.iml" filepath="$PROJECT_DIR$/SwipeDissmissView.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/swipedissmiss/swipedissmiss.iml" filepath="$PROJECT_DIR$/swipedissmiss/swipedissmiss.iml" />
     </modules>
   </component>
 </project>
