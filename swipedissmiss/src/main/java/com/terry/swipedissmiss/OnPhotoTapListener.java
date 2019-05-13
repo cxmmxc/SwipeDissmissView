@@ -9,5 +9,5 @@ import android.widget.ImageView;
  * Description:
  */
 public interface OnPhotoTapListener {
-    void onPhotoTap(ImageView imageView, float x, float y);
+    void onPhotoTap(ImageView imageView, float xPercent, float yPercent);
 }

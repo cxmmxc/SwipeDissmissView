@@ -9,10 +9,9 @@
     >
 
     <com.terry.swipedissmiss.SwipeDissmissView
+        android:id="@+id/imageview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/test03"
-        android:scaleType="fitCenter"
         />
 
 </android.support.constraint.ConstraintLayout>

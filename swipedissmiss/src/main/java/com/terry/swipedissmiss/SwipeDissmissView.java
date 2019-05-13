@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.DrawableRes;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
+import android.util.Log;
 
 /**
  * 作者：Terry.chen
@@ -28,11 +29,16 @@ public class SwipeDissmissView extends AppCompatImageView {
 
     public SwipeDissmissView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        init();
+    }
+
+    private void init() {
         if (isInEditMode()) {
             return;
         }
         super.setScaleType(ScaleType.MATRIX);
         mAttacher = new Attacher(this);
+        Log.i("cxm", "init --- ");
         if (pendingScaleType != null) {
             setScaleType(pendingScaleType);
             pendingScaleType = null;
@@ -72,7 +78,8 @@ public class SwipeDissmissView extends AppCompatImageView {
     @Override
     protected boolean setFrame(int l, int t, int r, int b) {
         boolean changed = super.setFrame(l, t, r, b);
-        if (changed) {
+        Log.i("cxm", "setFrame change = " + changed + ", attchar = " + mAttacher);
+        if (changed && mAttacher != null) {
             mAttacher.update();
         }
         return changed;
