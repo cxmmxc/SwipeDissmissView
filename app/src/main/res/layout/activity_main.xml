@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -12,6 +12,11 @@
         android:id="@+id/imageview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="gone"
+        />
+    <com.terry.swipedissmiss.CloudTerraceView
+        android:layout_width="1920dp"
+        android:layout_height="1930dp"
         />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>
