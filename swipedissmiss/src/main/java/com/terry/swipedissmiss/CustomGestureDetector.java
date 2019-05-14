@@ -1,6 +1,7 @@
 package com.terry.swipedissmiss;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -112,13 +113,14 @@ public class CustomGestureDetector {
                 mActivePointerId = INVALID_POINTER_ID;
                 if (mIsDraging) {
                     if (null != mVelocityTracker) {
-                        mVelocityTracker.addMovement(event);
                         mLastTouchX = getActiveX(event);
                         mLastTouchY = getActiveY(event);
+                        mVelocityTracker.addMovement(event);
                         mVelocityTracker.computeCurrentVelocity(1000);
                         float vX = mVelocityTracker.getXVelocity(), vY = mVelocityTracker.getYVelocity();
+                        Log.i("cxm", "vX = " + vX + ", vy = " + vY);
                         if (Math.max(Math.abs(vX), Math.abs(vY)) >= mMinimumVelocity) {
-                            mOnCustomGestureListener.fling(mLastTouchX, mLastTouchY, vX, vY);
+                            mOnCustomGestureListener.fling(mLastTouchX, mLastTouchY, -vX, -vY);
                         }
                     }
                 }
