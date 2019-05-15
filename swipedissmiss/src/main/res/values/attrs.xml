@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="CloudTerraceView">
-        <attr name="outside_stroke_width" format="dimension"></attr>
-        <attr name="outside_stroke_color" format="color"></attr>
-        <attr name="radius_stroke_width" format="dimension"></attr>
-        <attr name="radius_stroke_color" format="color"></attr>
-        <attr name="circle_bg" format="color"></attr>
-        <attr name="triangle_color" format="color"></attr>
-        <attr name="press_color" format="color"></attr>
+        <attr name="outside_stroke_width" format="dimension"/>
+        <attr name="outside_stroke_color" format="color"/>
+        <attr name="radius_stroke_width" format="dimension"/>
+        <attr name="radius_stroke_color" format="color"/>
+        <attr name="circle_bg" format="color"/>
+        <attr name="triangle_color" format="color"/>
+        <attr name="press_color" format="color"/>
+        <attr name="arc_count" format="integer"/>
+        <attr name="delta_width" format="dimension"/>
     </declare-styleable>
 </resources>

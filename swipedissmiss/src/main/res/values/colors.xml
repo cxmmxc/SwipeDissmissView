@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="ciclr_bg">#33000000</color>
+    <color name="outside_color">#EEEEEE</color>
+    <color name="press_color">#e69310</color>
+    <color name="delta_color">#FFFFFF</color>
 </resources>

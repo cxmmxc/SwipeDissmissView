@@ -5,18 +5,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/holo_green_dark"
     tools:context=".MainActivity"
     >
 
-    <com.terry.swipedissmiss.SwipeDissmissView
-        android:id="@+id/imageview"
+    <com.terry.swipedissmiss.CloudTerraceView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
-        />
-    <com.terry.swipedissmiss.CloudTerraceView
-        android:layout_width="1920dp"
-        android:layout_height="1930dp"
         />
 
 </RelativeLayout>
