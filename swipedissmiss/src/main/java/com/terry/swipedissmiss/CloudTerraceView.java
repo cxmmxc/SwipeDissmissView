@@ -11,9 +11,11 @@ import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.RectF;
 import android.graphics.Region;
+import android.graphics.Shader;
 import android.graphics.SweepGradient;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -56,7 +58,10 @@ public class CloudTerraceView extends View {
     private Point mDownPoint;
     private boolean mIsDown;
     private SweepGradient mSweepGradient;
+    private LinearGradient mLinearGradient;
     private List<Region> mRegionList;
+
+    private GestureDetector mGestureDetector;
 
     public CloudTerraceView(Context context) {
         this(context, null);
@@ -83,10 +88,20 @@ public class CloudTerraceView extends View {
         mArcCount = attributes.getInteger(R.styleable.CloudTerraceView_arc_count, 8);
         Log.w(TAG_CXM, "count = " + mArcCount);
         attributes.recycle();
-        initData();
+        initData(context);
     }
 
-    private void initData() {
+
+    private void initData(Context context) {
+        mGestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener(){
+            @Override
+            public boolean onSingleTapConfirmed(MotionEvent e) {
+                mDownPoint.x = (int) e.getX();
+                mDownPoint.y = (int) e.getY();
+                invalidate();
+                return true;
+            }
+        });
         mDownPoint = new Point();
         mRegionList = new ArrayList<>();
         mRadiusStrokePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -120,13 +135,7 @@ public class CloudTerraceView extends View {
         if (mRadius == 0) {
             return;
         }
-        Log.w(TAG_CXM, "onDraw = mRadius = " + mRadius);
         canvas.drawCircle(mRadius, mRadius, mRadius, mBgPaint);
-        if (mDownPoint.x != 0 && mDownPoint.y != 0) {
-            double v = Math.toDegrees(Math.atan2(mDownPoint.y, mDownPoint.x));
-            Log.w(TAG_CXM, "v = " + v);
-        }
-
         drawAllArc(canvas);
         drawDownArc(canvas);
         canvas.save();
@@ -137,25 +146,35 @@ public class CloudTerraceView extends View {
             path.lineTo(mRadius + (float) (mDeltaWidth * Math.sin(Math.toRadians(30d))), mRadius - mDeltaRadius + (float) (Math.cos(Math.toRadians(30d)) * mDeltaWidth));
             path.close();
             canvas.drawPath(path, mDeltaPaint);
-            Log.i(TAG_CXM, "rotate = "+perAngle * i);
             canvas.rotate(perAngle, mRadius, mRadius);
         }
         canvas.restore();
     }
 
     private void drawDownArc(Canvas canvas) {
-        mSweepGradient = new SweepGradient(mRadius, mRadius, new int[]{Color.TRANSPARENT, Color.YELLOW}, new float[]{0.6f, 1f});
-        mPressPaint.setShader(mSweepGradient);
+        // mSweepGradient = new SweepGradient(mRadius, mRadius, Color.TRANSPARENT, Color.YELLOW);
         //判断按下状态
         for (int i = 0; i < mRegionList.size(); i++) {
             Region region = mRegionList.get(i);
             if (region.contains(mDownPoint.x, mDownPoint.y)) {
-                canvas.drawArc(mBaseRectF);
+                float x = (float) mRadius + (float) (mRadius * Math.cos(Math.toRadians((i+1) * perAngle)));
+                float y = (float) mRadius + (float) (mRadius * Math.sin(Math.toRadians((i+1) * perAngle)));
+                Log.i(TAG_CXM, "selectIndex = " + i + ", x = " + x + ",y = " + y + ", cos = " + mRadius * Math.cos(Math.toRadians((i+1) * perAngle)) + " , sin = " + Math.sin(Math.toRadians((i+1) * perAngle)));
+                mLinearGradient = new LinearGradient((float)mRadius,(float) mRadius, x, y, new int[]{Color.TRANSPARENT, Color.YELLOW},new float[]{0.6f, 0.9f}, Shader.TileMode.CLAMP);
+                mPressPaint.reset();
+                mPressPaint.setShader(mLinearGradient);
+                canvas.drawArc(mBaseRectF, i * perAngle + perAngle / 2f, perAngle, true, mPressPaint);
+            } else {
+                mPressPaint.reset();
+                mPressPaint.setShader(null);
+                mPressPaint.setColor(Color.TRANSPARENT);
+                canvas.drawArc(mBaseRectF, i * perAngle + perAngle / 2f, perAngle, true, mPressPaint);
             }
         }
     }
 
     private void drawAllArc(Canvas canvas) {
+        mRegionList.clear();
         for (int i = 0; i < mArcCount; i++) {
             Path path = new Path();
             path.moveTo(mRadius, mRadius);
@@ -201,30 +220,29 @@ public class CloudTerraceView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        int action = event.getAction();
-        switch (action) {
-            case MotionEvent.ACTION_DOWN:
-                mIsDown = true;
-                float x = event.getX();
-                float y = event.getY();
-                mDownPoint.x = (int) x;
-                mDownPoint.y = (int) y;
-                invalidate();
-                return true;
-            case MotionEvent.ACTION_MOVE:
-                mDownPoint.x = (int) event.getX();
-                mDownPoint.y = (int) event.getY();
-                invalidate();
-                return true;
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_CANCEL:
-                mIsDown = false;
-                mDownPoint.x = 0;
-                mDownPoint.y = 0;
-                invalidate();
-                break;
-        }
-        Log.i(TAG_CXM, "pointX = " + mDownPoint.x + ", pointY = " + mDownPoint.y);
-        return super.onTouchEvent(event);
+        // int action = event.getAction();
+        // switch (action) {
+        //     case MotionEvent.ACTION_DOWN:
+        //         mIsDown = true;
+        //         float x = event.getX();
+        //         float y = event.getY();
+        //         mDownPoint.x = (int) x;
+        //         mDownPoint.y = (int) y;
+        //         invalidate();
+        //         return true;
+        //     case MotionEvent.ACTION_MOVE:
+        //         mDownPoint.x = (int) event.getX();
+        //         mDownPoint.y = (int) event.getY();
+        //         invalidate();
+        //         return true;
+        //     case MotionEvent.ACTION_UP:
+        //     case MotionEvent.ACTION_CANCEL:
+        //         mIsDown = false;
+        //         mDownPoint.x = 0;
+        //         mDownPoint.y = 0;
+        //         break;
+        // }
+        mGestureDetector.onTouchEvent(event);
+        return true;
     }
 }
